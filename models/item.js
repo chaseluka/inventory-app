@@ -9,9 +9,9 @@ const ItemSchema = new Schema({
   price: { type: Number, required: true },
   description: { type: String, required: true },
   stock_quantity: { type: Number, required: true },
-  image: { type: URL },
+  image: { type: String, required: false },
   publication_year: { type: Date },
-  console: [{ type: Schema.Types.ObjectId, ref: "Console" }],
+  system: [{ type: Schema.Types.ObjectId, ref: "System" }],
 });
 
 // Virtual for book's URL

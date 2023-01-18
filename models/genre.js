@@ -6,8 +6,6 @@ const GenreSchema = new Schema({
   name: {
     type: String,
     required: true,
-    enum: ["Role-Playing", "First Person Shooter"],
-    default: "Maintenance",
     maxLength: 100,
     minLength: 3,
   },

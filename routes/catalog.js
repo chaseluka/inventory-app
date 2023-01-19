@@ -2,38 +2,38 @@ const express = require("express");
 const router = express.Router();
 
 // Require controller modules.
-const item_controller = require("../controllers/bookController");
+const game_controller = require("../controllers/bookController");
 const system_controller = require("../controllers/authorController");
 const genre_controller = require("../controllers/genreController");
 
-/// Item ROUTES ///
+/// GAME ROUTES ///
 
 // GET catalog home page.
-router.get("/", item_controller.index);
+router.get("/", game_controller.index);
 
-// GET request for creating a item. NOTE This must come before routes that display item (uses id).
-router.get("/item/create", item_controller.item_create_get);
+// GET request for creating a game. NOTE This must come before routes that display game (uses id).
+router.get("/game/create", game_controller.game_create_get);
 
-// POST request for creating item.
-router.post("/item/create", item_controller.item_create_post);
+// POST request for creating game.
+router.post("/game/create", game_controller.game_create_post);
 
-// GET request to delete item.
-router.get("/item/:id/delete", item_controller.item_delete_get);
+// GET request to delete game.
+router.get("/game/:id/delete", game_controller.game_delete_get);
 
-// POST request to delete item.
-router.post("/item/:id/delete", item_controller.item_delete_post);
+// POST request to delete game.
+router.post("/game/:id/delete", game_controller.game_delete_post);
 
-// GET request to update item.
-router.get("/item/:id/update", item_controller.item_update_get);
+// GET request to update game.
+router.get("/game/:id/update", game_controller.game_update_get);
 
-// POST request to update item.
-router.post("/item/:id/update", item_controller.item_update_post);
+// POST request to update game.
+router.post("/game/:id/update", game_controller.game_update_post);
 
-// GET request for one item.
-router.get("/item/:id", item_controller.item_detail);
+// GET request for one game.
+router.get("/game/:id", game_controller.game_detail);
 
-// GET request for list of all item.
-router.get("/items", item_controller.item_list);
+// GET request for list of all game.
+router.get("/games", game_controller.game_list);
 
 /// SYSTEM ROUTES ///
 

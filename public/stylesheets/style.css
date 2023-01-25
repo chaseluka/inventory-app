@@ -31,7 +31,7 @@ body {
 
 .sidebar {
   flex-grow: 1;
-  min-width: 170px;
+  max-width: 170px;
 }
 
 .content {

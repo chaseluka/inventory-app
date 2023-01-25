@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 // Require controller modules.
-const game_controller = require("../controllers/bookController");
-const system_controller = require("../controllers/authorController");
+const game_controller = require("../controllers/gameController");
+const system_controller = require("../controllers/systemController");
 const genre_controller = require("../controllers/genreController");
 
 /// GAME ROUTES ///

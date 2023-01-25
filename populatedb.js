@@ -4,7 +4,7 @@
 var userArgs = process.argv.slice(2);
 
 var async = require("async");
-var Item = require("./models/item");
+var Game = require("./models/game");
 var System = require("./models/system");
 var Genre = require("./models/genre");
 
@@ -15,7 +15,7 @@ mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
-var items = [];
+var games = [];
 var systems = [];
 var genres = [];
 
@@ -47,7 +47,7 @@ function genreCreate(name, cb) {
   });
 }
 
-function itemCreate(
+function gameCreate(
   title,
   developer,
   genre,
@@ -59,7 +59,7 @@ function itemCreate(
   system,
   cb
 ) {
-  itemdetail = {
+  gamedetail = {
     title: title,
     developer: developer,
     price: price,
@@ -68,18 +68,18 @@ function itemCreate(
     publication_year: publication_year,
     system: system,
   };
-  if (genre != false) itemdetail.genre = genre;
-  if (image != false) itemdetail.image = image;
+  if (genre != false) gamedetail.genre = genre;
+  if (image != false) gamedetail.image = image;
 
-  var item = new Item(itemdetail);
-  item.save(function (err) {
+  var game = new Game(gamedetail);
+  game.save(function (err) {
     if (err) {
       cb(err, null);
       return;
     }
-    console.log("New Item: " + item);
-    items.push(item);
-    cb(null, item);
+    console.log("New game: " + game);
+    games.push(game);
+    cb(null, game);
   });
 }
 
@@ -121,7 +121,7 @@ function createBooks(cb) {
   async.parallel(
     [
       function (callback) {
-        itemCreate(
+        gameCreate(
           "The Elder Scrolls V: Skyrim",
           "Bathesda Game Studios",
           [genres[0], genres[2]],
@@ -135,7 +135,7 @@ function createBooks(cb) {
         );
       },
       function (callback) {
-        itemCreate(
+        gameCreate(
           "Fornite",
           "Epic Games",
           [genres[3]],
@@ -149,7 +149,7 @@ function createBooks(cb) {
         );
       },
       function (callback) {
-        itemCreate(
+        gameCreate(
           "Divinity: Original Sin 2 - Definitive Addition",
           "Larian Studios",
           [genres[0], genres[2]],
@@ -163,7 +163,7 @@ function createBooks(cb) {
         );
       },
       function (callback) {
-        itemCreate(
+        gameCreate(
           "Call of Duty: Modern Warfare II (2022)",
           "Infinity Ward",
           [genres[1]],
@@ -177,7 +177,7 @@ function createBooks(cb) {
         );
       },
       function (callback) {
-        itemCreate(
+        gameCreate(
           "Elden Ring",
           "FromSoftware",
           [genres[0], genres[2]],
@@ -191,7 +191,7 @@ function createBooks(cb) {
         );
       },
       function (callback) {
-        itemCreate(
+        gameCreate(
           "God of War Ragnarök",
           "Santa Monica Studio",
           [genres[1]],

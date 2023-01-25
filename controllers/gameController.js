@@ -1,4 +1,15 @@
 const Game = require("../models/game");
+const async = require("async");
+
+exports.index = (req, res) => {
+  // Get list of all games by passing empty object as match condition
+  Game.countDocuments({}, function (err, results) {
+    res.render("index", {
+      error: err,
+      data: results,
+    });
+  });
+};
 
 // Display list of all games.
 exports.game_list = (req, res) => {

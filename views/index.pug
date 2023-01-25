@@ -1,5 +1,11 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  
+  h1 Welcome to #[em Game Index!]
+  p Looking to buy a game and need to check the price? See if a game runs on your system? Here at #[em Game Index] we can get you the latest information on all things video games.
+
+  h1 Game Indexes in System: !{data}
+
+  h2 
+    a(href='/catalog/games') See All Games

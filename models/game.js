@@ -9,7 +9,7 @@ const GameSchema = new Schema({
   price: { type: Number, required: true },
   description: { type: String, required: true },
   image: { type: String, required: false },
-  publication_year: { type: Date },
+  publication_year: { type: Number },
   system: [{ type: Schema.Types.ObjectId, ref: "System" }],
 });
 

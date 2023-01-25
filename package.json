@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "devstart": "nodemon ./bin/www",
-    "serverstart": "DEBUG=inventory_app:* npm run devstart"
+    "serverstart": "DEBUG=inventory-app:* npm run devstart"
   },
   "dependencies": {
     "async": "^3.2.4",

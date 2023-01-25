@@ -2,6 +2,34 @@ doctype html
 html
   head
     title= title
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    block content
+    div(class='container')
+      div(class='header')
+        div(class='header-title') Game Index
+      div(class='main')
+        div(class='sidebar')
+          block sidebar
+            ul(class='sidebar-nav')
+              li
+                a(href='/catalog') Home
+              li
+                a(href='/catalog/games') All games
+              li
+                a(href='/catalog/systems') All systems
+              li
+                a(href='/catalog/genres') All genres
+              li
+                hr
+              li
+                a(href='/catalog/game/create') Create new game
+              li
+                a(href='/catalog/genre/create') Create new genre
+              li
+                a(href='/catalog/system/create') Create new system
+              
+
+        div(class='content')
+          block content

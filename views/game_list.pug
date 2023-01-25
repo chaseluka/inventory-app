@@ -9,7 +9,7 @@ block content
         a(href=game.url) 
           div(class="game-item")
             div #{game.title} 
-            div | #{game.developer} 
+            div | #[em #{game.developer}]
             div | $#{game.price}
 
     else

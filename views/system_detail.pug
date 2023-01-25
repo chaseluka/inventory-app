@@ -1,0 +1,20 @@
+extends layout
+
+block content
+  h1 #{system.name} 
+
+  p #[strong Games on #{system.name}:]
+    ul(class="list detail-list")
+      each game in system_games
+        li
+          a(href=game.url) 
+            div(class="game-item")
+              div #{game.title} 
+              div | #{game.developer} 
+              div | $#{game.price}
+
+  hr
+  p
+    a(href=system.url+'/delete') Delete System
+  p
+    a(href=system.url+'/update') Update System

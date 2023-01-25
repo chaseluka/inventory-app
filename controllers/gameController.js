@@ -12,17 +12,17 @@ exports.index = (req, res) => {
 };
 
 // Display list of all games.
-exports.game_list = (req, res) => {
+exports.game_list = (req, res, next) => {
   Game.find({}, "title developer price").exec(function (err, list_games) {
     if (err) {
       return next(err);
     }
-    res.render("game_list", { title: "Games", game_list: list_games });
+    res.render("game_list", { title: "Games:", game_list: list_games });
   });
 };
 
 // Display detail page for a specific game.
-exports.game_detail = (req, res) => {
+exports.game_detail = (req, res, next) => {
   async.parallel(
     {
       game(callback) {

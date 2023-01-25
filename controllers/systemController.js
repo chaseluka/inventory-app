@@ -1,13 +1,47 @@
 const System = require("../models/system");
+const Game = require("../models/game");
+
+const async = require("async");
 
 // Display list of all systems.
-exports.system_list = (req, res) => {
-  res.send("NOT IMPLEMENTED: system list");
+exports.system_list = (req, res, next) => {
+  System.find({}, "name").exec(function (err, list_systems) {
+    if (err) {
+      return next(err);
+    }
+    res.render("system_list", { title: "Systems:", system_list: list_systems });
+  });
 };
 
 // Display detail page for a specific system.
-exports.system_detail = (req, res) => {
-  res.send(`NOT IMPLEMENTED: system detail: ${req.params.id}`);
+exports.system_detail = (req, res, next) => {
+  async.parallel(
+    {
+      system(callback) {
+        System.findById(req.params.id).exec(callback);
+      },
+      system_games(callback) {
+        Game.find({ system: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.system == null) {
+        // No results.
+        const err = new Error("System not found");
+        err.status = 404;
+        return next(err);
+      }
+      // Successful, so render.
+      res.render("system_detail", {
+        title: results.system.title,
+        system: results.system,
+        system_games: results.system_games,
+      });
+    }
+  );
 };
 
 // Display system create form on GET.

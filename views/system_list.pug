@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h1= title
+
+  ul(class="list")
+    each system in system_list
+      li
+        a(href=system.url) 
+          div(class="game-item")
+            div #{system.name} 
+
+    else
+      li There are no systems.

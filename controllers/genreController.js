@@ -1,13 +1,47 @@
 const Genre = require("../models/genre");
+const Game = require("../models/game");
+
+const async = require("async");
 
 // Display list of all genres.
 exports.genre_list = (req, res) => {
-  res.send("NOT IMPLEMENTED: genre list");
+  Genre.find({}, "name").exec(function (err, list_genres) {
+    if (err) {
+      return next(err);
+    }
+    res.render("genre_list", { title: "Genres:", genre_list: list_genres });
+  });
 };
 
 // Display detail page for a specific genre.
 exports.genre_detail = (req, res) => {
-  res.send(`NOT IMPLEMENTED: genre detail: ${req.params.id}`);
+  async.parallel(
+    {
+      genre(callback) {
+        Genre.findById(req.params.id).exec(callback);
+      },
+      genre_games(callback) {
+        Game.find({ genre: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.genre == null) {
+        // No results.
+        const err = new Error("Genre not found");
+        err.status = 404;
+        return next(err);
+      }
+      // Successful, so render.
+      res.render("genre_detail", {
+        title: results.genre.title,
+        genre: results.genre,
+        genre_games: results.genre_games,
+      });
+    }
+  );
 };
 
 // Display genre create form on GET.

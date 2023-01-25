@@ -13,7 +13,12 @@ exports.index = (req, res) => {
 
 // Display list of all games.
 exports.game_list = (req, res) => {
-  res.send("NOT IMPLEMENTED: game list");
+  Game.find({}, "title developer price").exec(function (err, list_games) {
+    if (err) {
+      return next(err);
+    }
+    res.render("game_list", { title: "Games", game_list: list_games });
+  });
 };
 
 // Display detail page for a specific game.

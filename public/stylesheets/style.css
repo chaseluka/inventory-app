@@ -5,7 +5,8 @@ body {
 
 .container,
 .main,
-.header {
+.header,
+.game-item {
   display: flex;
 }
 
@@ -15,6 +16,9 @@ body {
 
 .header {
   justify-content: center;
+}
+
+.header {
   align-items: center;
   background-color: #000;
   color: #fff;
@@ -50,4 +54,40 @@ li {
 a {
   color: #00b7ff;
   text-decoration: none;
+}
+
+.list {
+  padding-left: 20px;
+  max-width: fit-content;
+}
+
+.list a {
+  color: #000;
+  max-width: min-content;
+}
+
+.list li {
+  padding: 1px;
+}
+
+.game-item {
+  width: fit-content;
+  padding: 7.5px;
+  border: 2px solid #00b7ff;
+  border-radius: 10px;
+  gap: 3px;
+}
+
+.game-item div:first-child {
+  color: #00b7ff;
+}
+
+.game-item div:last-child {
+  font-weight: bolder;
+}
+
+.game-item:hover {
+  box-shadow: 0 2px 6px 0 rgb(60 64 67 / 30%),
+    0 8px 16px 6px rgb(60 64 67 / 15%);
+  transform: scale(1.02);
 }

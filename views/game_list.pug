@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1= title
+
+  ul(class="list")
+    each game in game_list
+      li
+        a(href=game.url) 
+          div(class="game-item")
+            div #{game.title} 
+            div | #{game.developer} 
+            div | $#{game.price}
+
+    else
+      li There are no games.

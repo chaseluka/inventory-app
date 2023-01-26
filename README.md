@@ -3,7 +3,7 @@ Project Overview
  
 This project serves as an inventory managment app for a fictional Video Game index website, that house various reatail information about video games, systems, and genres. 
 
-The object of this object is to implement CRUD operations for games, systems, and genres. Furthermore this implements the MVC architecual pattern. Lastly, it serves to practice using MongoDB as a backend with Express a framework to build a true full-stack application.
+The objective is to implement CRUD operations for games, systems, and genres. Furthermore this implements the MVC architecual pattern. Lastly, it serves to practice using MongoDB as a backend with Express a framework to build a true full-stack application.
 
 
 Live View

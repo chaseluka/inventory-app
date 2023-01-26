@@ -50,7 +50,6 @@ exports.game_detail = (req, res, next) => {
       res.render("game_detail", {
         title: results.game.title,
         game: results.game,
-        game_instances: results.game_instance,
       });
     }
   );
@@ -194,12 +193,57 @@ exports.game_create_post = [
 
 // Display game delete form on GET.
 exports.game_delete_get = (req, res) => {
-  res.send("NOT IMPLEMENTED: game delete GET");
+  async.parallel(
+    {
+      game(callback) {
+        Game.findById(req.params.id)
+          .populate("system")
+          .populate("genre")
+          .exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.game == null) {
+        // No results.
+        res.redirect("/catalog/games");
+      }
+      // Successful, so render.
+      res.render("game_delete", {
+        title: "Delete Game",
+        game: results.game,
+      });
+    }
+  );
 };
 
 // Handle game delete on POST.
-exports.game_delete_post = (req, res) => {
-  res.send("NOT IMPLEMENTED: game delete POST");
+exports.game_delete_post = (req, res, next) => {
+  async.parallel(
+    {
+      game(callback) {
+        Game.findById(req.params.id)
+          .populate("system")
+          .populate("genre")
+          .exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      // Success
+      Game.findByIdAndRemove(req.body.gameid, (err) => {
+        if (err) {
+          return next(err);
+        }
+        // Success - go to game list
+        res.redirect("/catalog/games");
+      });
+    }
+  );
 };
 
 // Display game update form on GET.

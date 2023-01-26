@@ -166,3 +166,7 @@ form {
 .btn:hover {
   opacity: 0.8;
 }
+
+.btn-delete {
+  margin-top: 0px;
+}

@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  h1 #{title}: #{game.title} (#{game.publication_year})
+
+  p #[strong Developer:] #{game.developer}
+  p #[strong Description:] #{game.description}
+  p #[strong price:] $#{game.price}
+  p #[strong Genre:]
+    each val, index in game.genre
+      a(href=val.url)  #{val.name}
+      if index < game.genre.length - 1
+        |,
+  p #[strong Systems:]
+    each val, index in game.system
+      span  #{val.name}
+      if index < game.system.length - 1
+        |,
+
+
+  h3 Do you really want to delete this Game?
+
+  form(method='POST' action='')
+    div.form-group
+      input#gameid.form-control(type='hidden',name='gameid', required='true', value=game._id )
+
+    button.btn.btn-delete(type='submit') Delete
+

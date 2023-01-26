@@ -92,12 +92,69 @@ exports.genre_create_post = [
 
 // Display genre delete form on GET.
 exports.genre_delete_get = (req, res) => {
-  res.send("NOT IMPLEMENTED: genre delete GET");
+  async.parallel(
+    {
+      genre(callback) {
+        Genre.findById(req.params.id).exec(callback);
+      },
+      genre_games(callback) {
+        Game.find({ genre: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.genre == null) {
+        // No results.
+        const err = new Error("Genre not found");
+        err.status = 404;
+        return next(err);
+      }
+      // Successful, so render.
+      res.render("genre_delete", {
+        title: "Delete Genre",
+        genre: results.genre,
+        genre_games: results.genre_games,
+      });
+    }
+  );
 };
 
 // Handle genre delete on POST.
 exports.genre_delete_post = (req, res) => {
-  res.send("NOT IMPLEMENTED: genre delete POST");
+  async.parallel(
+    {
+      genre(callback) {
+        Genre.findById(req.params.id).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+
+      //Remove all instances if this genre from game documents
+      Game.updateMany(
+        { genre: req.params.id },
+        { $pull: { genre: req.params.id } },
+        (err, data) => {
+          if (err) {
+            return next(err);
+          }
+        }
+      );
+
+      // Success
+      Genre.findByIdAndRemove(req.body.genreid, (err) => {
+        if (err) {
+          return next(err);
+        }
+        // Success - go to game list
+        res.redirect("/catalog/genres");
+      });
+    }
+  );
 };
 
 // Display genre update form on GET.

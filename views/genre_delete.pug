@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  h1 #{title}: #{genre.name} 
+
+  p #[strong Games tagged with #[em #{genre.name}:]]
+    ul(class="list detail-list")
+      each game in genre_games
+        li
+          a(href=game.url) 
+            div(class="game-item")
+              div #{game.title} 
+
+  h3.delete-info.top Do you really want to delete this Genre? 
+  p.delete-info.bottom Doing so will result in removing all #[em #{genre.name}] tags from Game Indexes
+
+  form(method='POST' action='')
+    div.form-group
+      input#genreid.form-control(type='hidden',name='genreid', required='true', value=genre._id )
+
+    button.btn.btn-delete(type='submit') Delete

@@ -170,3 +170,11 @@ form {
 .btn-delete {
   margin-top: 0px;
 }
+
+.top {
+  margin-bottom: 5px;
+}
+
+.bottom {
+  margin-top: 5px;
+}

@@ -160,10 +160,85 @@ exports.system_delete_post = (req, res) => {
 
 // Display system update form on GET.
 exports.system_update_get = (req, res) => {
-  res.send("NOT IMPLEMENTED: system update GET");
+  // Get systems for form.
+  async.parallel(
+    {
+      system(callback) {
+        System.findById(req.params.id).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.system == null) {
+        // No results.
+        const err = new Error("System not found");
+        err.status = 404;
+        return next(err);
+      }
+      // Success.
+      res.render("System_form", {
+        title: "Update system",
+        system: results.system,
+      });
+    }
+  );
 };
 
 // Handle system update on POST.
-exports.system_update_post = (req, res) => {
-  res.send("NOT IMPLEMENTED: system update POST");
-};
+exports.system_update_post = [
+  // Validate and sanitize fields.
+  body("name", "Name must not be empty.").trim().isLength({ min: 1 }).escape(),
+
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    // Create a System object with escaped/trimmed data and old id.
+    const system = new System({
+      name: req.body.name,
+      _id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/error messages.
+
+      async.parallel(
+        {
+          system(callback) {
+            System.findById(req.params.id).exec(callback);
+          },
+        },
+        (err, results) => {
+          if (err) {
+            return next(err);
+          }
+          if (results.system == null) {
+            // No results.
+            const err = new Error("System not found");
+            err.status = 404;
+            return next(err);
+          }
+          // Success.
+          res.render("system_form", {
+            title: "Update System",
+            system: results.system,
+            errors: errors.array(),
+          });
+        }
+      );
+    }
+
+    // Data from form is valid. Update the record.
+    System.findByIdAndUpdate(req.params.id, system, {}, (err, thissystem) => {
+      if (err) {
+        return next(err);
+      }
+
+      // Successful: redirect to system detail page.
+      res.redirect(thissystem.url);
+    });
+  },
+];

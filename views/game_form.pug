@@ -18,7 +18,7 @@ block content
       input#publication_year.form-control(type='text', placeholder='Release date (YYYY)' name='publication_year' required='true' value=(undefined===game ? '' : game.publication_year) )
     div.form-group
       label(for='description') Description:
-      textarea#description.form-control(type='textarea', placeholder='Description' name='description' required='true') #{undefined===book ? '' : book.description}
+      textarea#description.form-control(type='textarea', placeholder='Description' name='description' required='true') #{undefined===game ? '' : game.description}
     div.form-group
       label Genre:
       div

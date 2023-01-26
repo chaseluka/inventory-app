@@ -248,10 +248,169 @@ exports.game_delete_post = (req, res, next) => {
 
 // Display game update form on GET.
 exports.game_update_get = (req, res) => {
-  res.send("NOT IMPLEMENTED: game update GET");
+  // Get game, systems and genres for form.
+  async.parallel(
+    {
+      game(callback) {
+        Game.findById(req.params.id)
+          .populate("system")
+          .populate("genre")
+          .exec(callback);
+      },
+      systems(callback) {
+        System.find(callback);
+      },
+      genres(callback) {
+        Genre.find(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.game == null) {
+        // No results.
+        const err = new Error("game not found");
+        err.status = 404;
+        return next(err);
+      }
+      // Success.
+      // Mark our selected genres and systems as checked.
+      for (const genre of results.genres) {
+        for (const gameGenre of results.game.genre) {
+          if (genre._id.toString() === gameGenre._id.toString()) {
+            genre.checked = "true";
+          }
+        }
+      }
+      for (const system of results.systems) {
+        for (const gameSystem of results.game.system) {
+          if (system._id.toString() === gameSystem._id.toString()) {
+            system.checked = "true";
+          }
+        }
+      }
+      res.render("game_form", {
+        title: "Update Game",
+        systems: results.systems,
+        genres: results.genres,
+        game: results.game,
+      });
+    }
+  );
 };
 
 // Handle game update on POST.
-exports.game_update_post = (req, res) => {
-  res.send("NOT IMPLEMENTED: game update POST");
-};
+exports.game_update_post = [
+  // Convert the genre and system to an array
+  (req, res, next) => {
+    if (!Array.isArray(req.body.genre)) {
+      req.body.genre =
+        typeof req.body.genre === "undefined" ? [] : [req.body.genre];
+    }
+    next();
+  },
+  (req, res, next) => {
+    if (!Array.isArray(req.body.system)) {
+      req.body.system =
+        typeof req.body.system === "undefined" ? [] : [req.body.system];
+    }
+    next();
+  },
+
+  // Validate and sanitize fields.
+  body("title", "Title must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("developer", "Developer must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("price", "Price must not be empty. If game is free input 0.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("publication_year", "Release date must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("description", "Description must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("genre.*").escape(),
+  body("system.*").escape(),
+
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    // Create a Game object with escaped/trimmed data and old id.
+    const game = new Game({
+      title: req.body.title,
+      developer: req.body.developer,
+      price: req.body.price,
+      description: req.body.description,
+      publication_year: req.body.publication_year,
+      genre: typeof req.body.genre === "undefined" ? [] : req.body.genre,
+      publication_year: req.body.publication_year,
+      system: typeof req.body.system === "undefined" ? [] : req.body.system,
+      image: "false",
+      _id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/error messages.
+
+      // Get all systems and genres for form.
+      async.parallel(
+        {
+          systems(callback) {
+            System.find(callback);
+          },
+          genres(callback) {
+            Genre.find(callback);
+          },
+        },
+        (err, results) => {
+          if (err) {
+            return next(err);
+          }
+
+          // Mark our selected genres as checked.
+          for (const genre of results.genres) {
+            if (game.genre.includes(genre._id)) {
+              genre.checked = "true";
+            }
+          }
+          // Mark our selected systems as checked.
+          for (const system of results.systems) {
+            if (game.system.includes(system._id)) {
+              system.checked = "true";
+            }
+          }
+          res.render("game_form", {
+            title: "Update Game",
+            systems: results.systems,
+            genres: results.genres,
+            game,
+            errors: errors.array(),
+          });
+        }
+      );
+      return;
+    }
+
+    // Data from form is valid. Update the record.
+    Game.findByIdAndUpdate(req.params.id, game, {}, (err, thisgame) => {
+      if (err) {
+        return next(err);
+      }
+
+      // Successful: redirect to game detail page.
+      res.redirect(thisgame.url);
+    });
+  },
+];

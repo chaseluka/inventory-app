@@ -1,6 +1,7 @@
 const System = require("../models/system");
 const Game = require("../models/game");
 
+const { body, validationResult } = require("express-validator");
 const async = require("async");
 
 // Display list of all systems.
@@ -46,13 +47,49 @@ exports.system_detail = (req, res, next) => {
 
 // Display system create form on GET.
 exports.system_create_get = (req, res) => {
-  res.send("NOT IMPLEMENTED: system create GET");
+  res.render("system_form", {
+    title: "Add New System",
+  });
 };
 
 // Handle system create on POST.
-exports.system_create_post = (req, res) => {
-  res.send("NOT IMPLEMENTED: system create POST");
-};
+exports.system_create_post = [
+  // Validate and sanitize fields.
+  body("name", "Name must not be empty.").trim().isLength({ min: 1 }).escape(),
+
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+    // Create a System object with escaped and trimmed data.
+    const system = new System({
+      name: req.body.name,
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/error messages.
+      (err, results) => {
+        if (err) {
+          return next(err);
+        }
+        res.render("system_form", {
+          title: "Add New System",
+          errors,
+        });
+      };
+      return;
+    }
+
+    // Data from form is valid. Save system.
+    system.save((err) => {
+      if (err) {
+        return next(err);
+      }
+      // Successful: redirect to new system record.
+      res.redirect(system.url);
+    });
+  },
+];
 
 // Display system delete form on GET.
 exports.system_delete_get = (req, res) => {

@@ -73,7 +73,7 @@ exports.game_create_get = (req, res, next) => {
         return next(err);
       }
       res.render("game_form", {
-        title: "Add New Games",
+        title: "Add New Game",
         systems: results.systems,
         genres: results.genres,
       });
@@ -85,7 +85,6 @@ exports.game_create_get = (req, res, next) => {
 exports.game_create_post = [
   // Convert the genre and system to an array.
   (req, res, next) => {
-    console.log("1");
     if (!Array.isArray(req.body.genre)) {
       req.body.genre =
         typeof req.body.genre === "undefined" ? [] : [req.body.genre];
@@ -94,7 +93,6 @@ exports.game_create_post = [
   },
 
   (req, res, next) => {
-    console.log("1b");
     if (!Array.isArray(req.body.system)) {
       req.body.system =
         typeof req.body.system === "undefined" ? [] : [req.body.system];
@@ -130,7 +128,6 @@ exports.game_create_post = [
   (req, res, next) => {
     // Extract the validation errors from a request.
     const errors = validationResult(req);
-    console.log("do I make it here?");
     // Create a Game object with escaped and trimmed data.
     const game = new Game({
       title: req.body.title,

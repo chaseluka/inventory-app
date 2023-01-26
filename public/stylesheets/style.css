@@ -6,11 +6,15 @@ body {
 .container,
 .main,
 .header,
-.game-item {
+.game-item,
+.form-group,
+form {
   display: flex;
 }
 
-.container {
+.container,
+.form-group,
+form {
   flex-direction: column;
 }
 
@@ -30,7 +34,6 @@ body {
 .main {
   height: 100%;
   padding: 50px;
-  overflow-x: hidden;
 }
 
 .sidebar {
@@ -121,4 +124,45 @@ a {
   width: 60px;
   filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(319deg)
     brightness(103%) contrast(101%);
+}
+
+.form-group {
+  gap: 5px;
+  width: clamp(200px, 60vw, 600px);
+}
+
+.form-group label {
+  font-size: 15px;
+}
+
+.form-control {
+  border-radius: 7.5px;
+  border: 2px solid #000;
+  padding: 5px 8px;
+  font-size: 14px;
+}
+
+.form-control:focus {
+  outline: #00b7ff;
+  border-color: #00b7ff;
+}
+
+form {
+  gap: 10px;
+}
+
+.btn {
+  margin-top: 10px;
+  font-size: 15px;
+  padding: 7.5px 20px;
+  max-width: fit-content;
+  background-color: #00b7ff;
+  border: none;
+  color: #fff;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  opacity: 0.8;
 }

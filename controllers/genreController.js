@@ -1,6 +1,7 @@
 const Genre = require("../models/genre");
 const Game = require("../models/game");
 
+const { body, validationResult } = require("express-validator");
 const async = require("async");
 
 // Display list of all genres.
@@ -46,13 +47,48 @@ exports.genre_detail = (req, res) => {
 
 // Display genre create form on GET.
 exports.genre_create_get = (req, res) => {
-  res.send("NOT IMPLEMENTED: genre create GET");
+  res.render("genre_form", {
+    title: "Add New Genre",
+  });
 };
 
 // Handle genre create on POST.
-exports.genre_create_post = (req, res) => {
-  res.send("NOT IMPLEMENTED: genre create POST");
-};
+exports.genre_create_post = [
+  // Validate and sanitize fields.
+  body("name", "Name must not be empty.").trim().isLength({ min: 1 }).escape(),
+
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+    // Create a Genre object with escaped and trimmed data.
+    const genre = new Genre({
+      name: req.body.name,
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/error messages.
+      (err, results) => {
+        if (err) {
+          return next(err);
+        }
+        res.render("genre_form", {
+          title: "Add New Genre",
+        });
+      };
+      return;
+    }
+
+    // Data from form is valid. Save genre.
+    genre.save((err) => {
+      if (err) {
+        return next(err);
+      }
+      // Successful: redirect to new genre record.
+      res.redirect(genre.url);
+    });
+  },
+];
 
 // Display genre delete form on GET.
 exports.genre_delete_get = (req, res) => {

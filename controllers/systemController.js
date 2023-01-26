@@ -93,12 +93,69 @@ exports.system_create_post = [
 
 // Display system delete form on GET.
 exports.system_delete_get = (req, res) => {
-  res.send("NOT IMPLEMENTED: system delete GET");
+  async.parallel(
+    {
+      system(callback) {
+        System.findById(req.params.id).exec(callback);
+      },
+      system_games(callback) {
+        Game.find({ system: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.system == null) {
+        // No results.
+        const err = new Error("System not found");
+        err.status = 404;
+        return next(err);
+      }
+      // Successful, so render.
+      res.render("system_delete", {
+        title: "Delete System",
+        system: results.system,
+        system_games: results.system_games,
+      });
+    }
+  );
 };
 
 // Handle system delete on POST.
 exports.system_delete_post = (req, res) => {
-  res.send("NOT IMPLEMENTED: system delete POST");
+  async.parallel(
+    {
+      system(callback) {
+        System.findById(req.params.id).exec(callback);
+      },
+    },
+    (err) => {
+      if (err) {
+        return next(err);
+      }
+
+      //Remove all instances if this system from game documents
+      Game.updateMany(
+        { system: req.params.id },
+        { $pull: { system: req.params.id } },
+        (err) => {
+          if (err) {
+            return next(err);
+          }
+        }
+      );
+
+      // Success
+      System.findByIdAndRemove(req.body.systemid, (err) => {
+        if (err) {
+          return next(err);
+        }
+        // Success - go to game list
+        res.redirect("/catalog/systems");
+      });
+    }
+  );
 };
 
 // Display system update form on GET.

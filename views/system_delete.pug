@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  h1 #{title}: #{system.name} 
+
+  p #[strong Games on #{system.name}:]
+    ul(class="list detail-list")
+      each game in system_games
+        li
+          a(href=game.url) 
+            div(class="game-item")
+              div #{game.title} 
+
+  h3.delete-info.top Do you really want to delete this System? 
+  p.delete-info.bottom Doing so will result in removing all #[em #{system.name}] tags from Game Indexes
+
+  form(method='POST' action='')
+    div.form-group
+      input#systemid.form-control(type='hidden',name='systemid', required='true', value=system._id )
+
+    button.btn.btn-delete(type='submit') Delete

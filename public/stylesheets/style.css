@@ -24,6 +24,7 @@ body {
   color: #fff;
   height: 100px;
   font-size: clamp(30px, 4vh, 60px);
+  gap: 20px;
 }
 
 .main {
@@ -113,4 +114,11 @@ a {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.icon svg {
+  height: 60px;
+  width: 60px;
+  filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(319deg)
+    brightness(103%) contrast(101%);
 }

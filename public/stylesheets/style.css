@@ -178,3 +178,7 @@ form {
 .bottom {
   margin-top: 5px;
 }
+
+.admin-error {
+  color: red;
+}

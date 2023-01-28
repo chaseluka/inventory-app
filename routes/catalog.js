@@ -5,6 +5,7 @@ const router = express.Router();
 const game_controller = require("../controllers/gameController");
 const system_controller = require("../controllers/systemController");
 const genre_controller = require("../controllers/genreController");
+const admin_controller = require("../controllers/adminController");
 
 /// GAME ROUTES ///
 
@@ -86,5 +87,13 @@ router.get("/genre/:id", genre_controller.genre_detail);
 
 // GET request for list of all Genre.
 router.get("/genres", genre_controller.genre_list);
+
+/// ADMIN ROUTES ///
+
+// GET request to admin for any document.
+router.get("*/:controller/:id/:view/admin", admin_controller.admin_get);
+
+// GET request to admin for any document.
+router.post("*/:controller/:id/:view/admin", admin_controller.admin_post);
 
 module.exports = router;

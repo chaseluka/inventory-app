@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1= title
+
+  form(method="POST" action='')
+    if errors 
+      span.admin-error!= errors
+    div.form-group
+          label(for='code') Admin Code:
+          input#code.form-control(type='text', placeholder='Enter Admin Code' name='code' required='true' value=(undefined===admin ? '' : admin.code) )
+
+    button.btn(type='submit') Submit
+  
+  

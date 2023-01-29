@@ -15,8 +15,7 @@ var app = express();
 
 app.use(helmet());
 
-const dotenv = require("dotenv");
-dotenv.config();
+require("dotenv").config({ path: "MONGODB_URI" });
 
 // Set up mongoose connection
 const mongoose = require("mongoose");

@@ -34,9 +34,8 @@ exports.admin_post = [
       });
       return;
     }
-    const admin_id = "63d56c6c006068f49e9fe471";
-    Admin.find({}, (err, results) => {
-      console.log(results);
+    const admin_id = "63d704602ecbc400c2a055ca";
+    Admin.findById(admin_id, (err, results) => {
       if (err) {
         return next(err);
       }

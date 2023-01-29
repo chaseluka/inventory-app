@@ -35,7 +35,8 @@ exports.admin_post = [
       return;
     }
     const admin_id = "63d56c6c006068f49e9fe471";
-    Admin.findById(admin_id, (err, results) => {
+    Admin.find({}, (err, results) => {
+      console.log(results);
       if (err) {
         return next(err);
       }

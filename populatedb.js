@@ -7,7 +7,6 @@ var async = require("async");
 var Game = require("./models/game");
 var System = require("./models/system");
 var Genre = require("./models/genre");
-var Admin = require("./models/admin");
 
 var mongoose = require("mongoose");
 var mongoDB = userArgs[0];
@@ -19,7 +18,6 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 var games = [];
 var systems = [];
 var genres = [];
-var admin = [];
 
 function systemCreate(name, cb) {
   var system = new System({ name: name });

@@ -27,7 +27,6 @@ exports.game_list = (req, res, next) => {
 
 // Display detail page for a specific game.
 exports.game_detail = (req, res, next) => {
-  console.log(req.params);
   async.parallel(
     {
       game(callback) {
@@ -194,8 +193,6 @@ exports.game_create_post = [
 
 // Display game delete form on GET.
 exports.game_delete_get = (req, res) => {
-  console.log("this is delete page");
-  console.log(req.params.id);
   async.parallel(
     {
       game(callback) {
@@ -206,7 +203,6 @@ exports.game_delete_get = (req, res) => {
       },
     },
     (err, results) => {
-      console.log("do I make it here?");
       if (err) {
         return next(err);
       }

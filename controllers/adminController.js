@@ -39,8 +39,6 @@ exports.admin_post = [
       if (err) {
         return next(err);
       }
-      console.log(admin.code);
-      console.log(results.code);
       //if code is incorrect rerender with message informing user
       if (results.code !== admin.code) {
         res.render("admin", {
@@ -63,7 +61,6 @@ exports.admin_post = [
       ];
       // Successful code, so redirect to the appropriate page.
       if (results.code === admin.code) {
-        console.log("yay it worked");
         res.redirect(`/catalog/${controller}/${id}/${view}`);
       }
     });
